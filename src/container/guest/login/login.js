@@ -5,10 +5,13 @@ import {
 	Grid,
 	Button,
 	Backdrop,
+	Fade,
 } from "@material-ui/core";
 import "./login.css";
 import loginImage from "../../../assets/images/login_image.jpg";
 import appLogo from "../../../assets/images/app_logo.png";
+import Register from '../register/register';
+import {withRouter} from 'react-router-dom';
 
 class Login extends Component {
 	constructor(props) {
@@ -18,6 +21,7 @@ class Login extends Component {
 			email: "",
 			password: "",
 			isLoading: false,
+			showRegister: false,
 		};
 
 		this.onemailChanged = this.onemailChanged.bind(this);
@@ -30,6 +34,7 @@ class Login extends Component {
 			isLoading: !this.state.isLoading,
 		});
 		event.preventDefault();
+		this.props.history.replace('/home');
 	}
 
 	onemailChanged = (event) => {
@@ -44,11 +49,17 @@ class Login extends Component {
 		})
 	}
 
+	changeForm = (value) => {
+		this.setState({
+			showRegister: value,
+		});
+	}
+
 	render() {
 		return(
 			<React.Fragment>
 			<Backdrop className="backdrop" open={this.state.isLoading}>
-			    <CircularProgress color="inherit" />
+			    <CircularProgress color="secondary" />
 			</Backdrop>
 			<div className="login-container"> 
 				<Grid container>
@@ -61,34 +72,45 @@ class Login extends Component {
 							<Grid item xs={12} sm={6} className="form-container">
 								<img src={appLogo} className="app-logo" alt="applogo"/>
 								<p className="sub-title">Welcome to Fun Bloggers</p>
-								<form onSubmit={this.onFormSubmit}>
-									<TextField 
-										onChange={this.onemailChanged} 
-										type="text"
-										value={this.state.email} 
-										label="Email"
-										placeholder="someone@mail.com" /> 
-									<p></p>
-									<TextField
-										type="password"
-										label="Password" 
-										placeholder="******"
-										value={this.state.password}
-										onChange={this.onPasswordChanged} /> 
-									<p></p>
-									<Button type="submit" variant="contained" color="primary">
-									  	Sign In
-									</Button>
-									<p></p>
-									<h6> -- Or -- </h6>
-									<p></p>
-									<Button 
-										type="submit" 
-										className="register-button">
-									  	Sign Up
-									</Button>
-									<p></p>
-								</form>
+								{
+									this.state.showRegister === false ?
+									<Fade in={!this.state.showRegister}>
+										<div>
+											<form method="post" onSubmit={this.onFormSubmit}>
+												<p>Login</p>
+												<TextField 
+													onChange={this.onemailChanged} 
+													type="text"
+													value={this.state.email} 
+													label="Email"
+													placeholder="someone@mail.com" /> 
+												<p></p>
+												<TextField
+													type="password"
+													label="Password" 
+													placeholder="******"
+													value={this.state.password}
+													onChange={this.onPasswordChanged} /> 
+												<p></p>
+												<Button type="submit" variant="contained" color="primary">
+												  	Sign In
+												</Button>
+												<p></p>
+												<h6> -- Or -- </h6>
+											</form>
+											<Button 
+												onClick={() => this.changeForm(true)}
+												type="submit" 
+												className="register-button">
+											  	Sign Up
+											</Button>
+										</div>
+									</Fade>
+									:
+									<Fade in={this.state.showRegister}>
+										<Register onClick={() => this.changeForm(false)}/>
+									</Fade>
+								}
 							</Grid>
 						</Grid>
 					</Grid>
@@ -100,4 +122,4 @@ class Login extends Component {
 	}
 }
 
-export default Login;
+export default withRouter(Login);
