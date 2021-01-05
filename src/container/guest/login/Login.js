@@ -10,8 +10,10 @@ import {
 import "./login.css";
 import loginImage from "../../../assets/images/login_image.jpg";
 import appLogo from "../../../assets/images/app_logo.png";
-import Register from '../register/register';
+import Register from '../register/Register';
 import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {SET_TOKEN} from '../../../redux/actionTypes';
 
 class Login extends Component {
 	constructor(props) {
@@ -34,6 +36,7 @@ class Login extends Component {
 			isLoading: !this.state.isLoading,
 		});
 		event.preventDefault();
+		this.props.setToken();
 		this.props.history.replace('/home');
 	}
 
@@ -63,7 +66,7 @@ class Login extends Component {
 			</Backdrop>
 			<div className="login-container"> 
 				<Grid container>
-					<Grid item xs={0} sm={2}></Grid>
+					<Grid item sm={2}></Grid>
 					<Grid item xs={12} sm={8} className="login-form-container">
 						<Grid container>
 							<Grid item xs={12} sm={6}>
@@ -107,14 +110,14 @@ class Login extends Component {
 										</div>
 									</Fade>
 									:
-									<Fade in={this.state.showRegister}>
+									<Fade in={!this.state.showRegister}>
 										<Register onClick={() => this.changeForm(false)}/>
 									</Fade>
 								}
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={0} sm={2}></Grid>
+					<Grid item sm={2}></Grid>
 				</Grid>
 			</div>
 			</React.Fragment>
@@ -122,4 +125,10 @@ class Login extends Component {
 	}
 }
 
-export default withRouter(Login);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setToken: () => dispatch({type: SET_TOKEN})
+	}
+}
+
+export default connect(null, mapDispatchToProps)(withRouter(Login));

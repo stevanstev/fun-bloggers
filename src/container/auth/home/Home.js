@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import BottomNav from '../../../component/bottom_nav';
+import BottomNav from '../../../component/BottomNav';
 import { 
 	Grid,
 } from "@material-ui/core";

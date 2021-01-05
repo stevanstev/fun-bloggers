@@ -4,6 +4,7 @@ import {
 	TextField,
 	Button,
 } from "@material-ui/core";
+import {callRegisterAPIPost} from '../../../actions/actions';
 
 class Register extends Component {
 	constructor(props) {
@@ -25,6 +26,12 @@ class Register extends Component {
 	}
 
 	onRegisterSubmit(event) {
+		const requestData = {
+			email: this.state.registerEmail,
+			password: this.state.registerPassword,
+			fullName: this.state.registerFullName,
+		};
+		callRegisterAPIPost(requestData);
 		event.preventDefault();
 	}	
 
