@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import BottomNav from '../../../component/BottomNav';
 import {connect} from 'react-redux';
 import {CAN_REDIRECT} from '../../../redux/actionTypes';
+import AppBar from '../../../component/AppBar';
 
 class Home extends Component {
 	componentDidMount() {
@@ -11,6 +12,7 @@ class Home extends Component {
 	render() {
 		return(
 			<div>
+				<AppBar />
 				<BottomNav />
 			</div>
 		);

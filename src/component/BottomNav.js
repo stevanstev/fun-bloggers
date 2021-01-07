@@ -26,12 +26,11 @@ const useStyles = makeStyles({
   		textAlign: "center",
   	},
   	container: {
-  		justify: "center",
-  		alignItems: "center",
-  		bottom: 30,
-  		left:0, 
-  		right: 0,
-  		position: "absolute",
+  		width: '100%',
+        position: 'fixed',
+        bottom: 30,
+        left: 0,
+        right: 0,
   	}
 });
 
