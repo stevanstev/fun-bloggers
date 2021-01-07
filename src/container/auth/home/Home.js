@@ -1,23 +1,26 @@
 import React, {Component} from 'react';
 import BottomNav from '../../../component/BottomNav';
-import { 
-	Grid,
-} from "@material-ui/core";
+import {connect} from 'react-redux';
+import {CAN_REDIRECT} from '../../../redux/actionTypes';
 
 class Home extends Component {
+	componentDidMount() {
+		this.props.resetState();
+	}
+
 	render() {
 		return(
 			<div>
-				<Grid container>
-					<Grid item xs={0} sm={2}></Grid>
-					<Grid item xs={0} sm={8}>
-						<BottomNav />
-					</Grid>
-					<Grid item xs={0} sm={2}></Grid>
-				</Grid>
+				<BottomNav />
 			</div>
 		);
 	}
 }
 
-export default Home;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		resetState: () => dispatch({type: CAN_REDIRECT})
+	}
+}
+
+export default connect(null, mapDispatchToProps)(Home);

@@ -7,8 +7,13 @@ import {BrowserRouter as Router, Switch } from 'react-router-dom';
 import {connect} from 'react-redux';
 import PrivateRoute from './component/PrivateRoute';
 import GuestRoute from './component/GuestRoute';
+import {GET_TOKEN} from './redux/actionTypes';
 
 class App extends Component {
+    componentDidMount() {
+        this.props.getToken();
+    }
+
     render() {
         let isAuth = this.props.authToken;
 
@@ -26,10 +31,16 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        authToken: state.authToken
+        getToken: () => dispatch({type: GET_TOKEN})
     }
 }
 
-export default connect(mapStateToProps, null)(App);
+const mapStateToProps = (state) => {
+    return {
+        authToken: state.authReducer.authToken
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

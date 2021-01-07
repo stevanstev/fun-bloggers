@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
+import BottomNav from '../../../component/BottomNav';
 
 class Posts extends Component {
 	render() {
 		return(
 			<div>
-				Posts
+				<BottomNav />
 			</div>
 		);
 	}

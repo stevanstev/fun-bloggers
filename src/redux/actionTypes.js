@@ -1,3 +1,7 @@
 export const REMOVE_TOKEN = "REMOVE_TOKEN";
-export const CHECK_TOKEN = "CHECK_TOKEN";
+export const GET_TOKEN = "GET_TOKEN";
 export const SET_TOKEN = "SET_TOKEN";
+export const AUTH_ROUTE_INDEX = "AUTH_ROUTE_INDEX";
+export const SHOW_LOADING = "SHOW_LOADING";
+export const VALIDATION_ERROR = "VALIDATION_ERROR";
+export const CAN_REDIRECT = "CAN_REDIRECT";

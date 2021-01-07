@@ -1,11 +1,9 @@
 import React, {Component} from "react";
 import { 
 	TextField,
-	CircularProgress,
 	Grid,
 	Button,
-	Backdrop,
-	Fade,
+	CircularProgress,
 } from "@material-ui/core";
 import "./login.css";
 import loginImage from "../../../assets/images/login_image.jpg";
@@ -14,6 +12,9 @@ import Register from '../register/Register';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {SET_TOKEN} from '../../../redux/actionTypes';
+import {callLoginAPIPost} from '../../../actions/actions';
+import {CAN_REDIRECT} from '../../../redux/actionTypes';
+import ErrorField from '../../../component/ErrorField';
 
 class Login extends Component {
 	constructor(props) {
@@ -22,7 +23,6 @@ class Login extends Component {
 		this.state = {
 			email: "",
 			password: "",
-			isLoading: false,
 			showRegister: false,
 		};
 
@@ -32,12 +32,12 @@ class Login extends Component {
 	}
 
 	onFormSubmit = (event) => {
-		this.setState({
-			isLoading: !this.state.isLoading,
-		});
+		const requestData = {
+			email: this.state.email,
+			password: this.state.password,
+		};		
 		event.preventDefault();
-		this.props.setToken();
-		this.props.history.replace('/home');
+		this.props.callLoginAPIPost(requestData);
 	}
 
 	onemailChanged = (event) => {
@@ -58,77 +58,94 @@ class Login extends Component {
 		});
 	}
 
+	onRegisterSuccess = () => {
+		this.props.resetRegisterState();
+		this.setState({
+			showRegister: false,
+		});
+	}
+
 	render() {
-		return(
-			<React.Fragment>
-			<Backdrop className="backdrop" open={this.state.isLoading}>
-			    <CircularProgress color="secondary" />
-			</Backdrop>
-			<div className="login-container"> 
-				<Grid container>
-					<Grid item sm={2}></Grid>
-					<Grid item xs={12} sm={8} className="login-form-container">
-						<Grid container>
-							<Grid item xs={12} sm={6}>
-								<img src={loginImage} className="login-image" alt="loginimage"/>
-							</Grid>
-							<Grid item xs={12} sm={6} className="form-container">
-								<img src={appLogo} className="app-logo" alt="applogo"/>
-								<p className="sub-title">Welcome to Fun Bloggers</p>
-								{
-									this.state.showRegister === false ?
-									<Fade in={!this.state.showRegister}>
-										<div>
-											<form method="post" onSubmit={this.onFormSubmit}>
-												<p>Login</p>
-												<TextField 
-													onChange={this.onemailChanged} 
-													type="text"
-													value={this.state.email} 
-													label="Email"
-													placeholder="someone@mail.com" /> 
-												<p></p>
-												<TextField
-													type="password"
-													label="Password" 
-													placeholder="******"
-													value={this.state.password}
-													onChange={this.onPasswordChanged} /> 
-												<p></p>
-												<Button type="submit" variant="contained" color="primary">
-												  	Sign In
+		if (this.props.canRedirect === true) {
+			this.props.history.replace('/home');
+		} else {
+			return(
+				<React.Fragment>
+				<div className="login-container"> 
+					<Grid container>
+						<Grid item sm={2}></Grid>
+						<Grid item xs={12} sm={8} className="login-form-container">
+							<Grid container>
+								<Grid item xs={12} sm={6}>
+									<img src={loginImage} className="login-image" alt="loginimage"/>
+								</Grid>
+								<Grid item xs={12} sm={6} className="form-container">
+									<img src={appLogo} className="app-logo" alt="applogo"/>
+									<p className="sub-title">Welcome to Fun Bloggers</p>
+									{
+										this.state.showRegister === false ?
+											<div>
+												<form method="post" onSubmit={this.onFormSubmit}>
+													{this.props.isLoading ? <CircularProgress color="secondary" /> : ''}
+													<p>Login</p>
+													<p></p>
+													<TextField 
+														onChange={this.onemailChanged} 
+														type="text"
+														value={this.state.email} 
+														label="Email"
+														placeholder="someone@mail.com" /> 
+													{ this.props.errors.loginEmailError !== "" ? <ErrorField message={this.props.errors.loginEmailError}/> : <p></p>}
+													<TextField
+														type="password"
+														label="Password" 
+														placeholder="******"
+														value={this.state.password}
+														onChange={this.onPasswordChanged} /> 
+													{ this.props.errors.loginPasswordError !== "" ? <ErrorField message={this.props.errors.loginPasswordError}/> : <p></p>}
+													<Button type="submit" variant="contained" color="primary">
+													  	Sign In
+													</Button>
+													<p></p>
+													<h6> -- Or -- </h6>
+												</form>
+												<Button 
+													onClick={() => this.changeForm(true)}
+													type="submit" 
+													className="register-button">
+												  	Sign Up
 												</Button>
-												<p></p>
-												<h6> -- Or -- </h6>
-											</form>
-											<Button 
-												onClick={() => this.changeForm(true)}
-												type="submit" 
-												className="register-button">
-											  	Sign Up
-											</Button>
-										</div>
-									</Fade>
-									:
-									<Fade in={!this.state.showRegister}>
-										<Register onClick={() => this.changeForm(false)}/>
-									</Fade>
-								}
+											</div>
+										:
+											<Register registerSuccess={this.onRegisterSuccess} backToLogin={() => this.changeForm(false)}/>
+									}
+								</Grid>
 							</Grid>
 						</Grid>
+						<Grid item sm={2}></Grid>
 					</Grid>
-					<Grid item sm={2}></Grid>
-				</Grid>
-			</div>
-			</React.Fragment>
-		);
+				</div>
+				</React.Fragment>
+			);
+		}
+	}
+}
+
+const mapStateToProps = (state) => {
+	return {
+		isLoading: state.authReducer.isLoading,
+		errors: state.authReducer.errors,
+		token: state.authReducer.authToken,
+		canRedirect: state.authReducer.canRedirect,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setToken: () => dispatch({type: SET_TOKEN})
+		setToken: () => dispatch({type: SET_TOKEN}),
+		resetRegisterState: () => dispatch({type: CAN_REDIRECT}),
+		callLoginAPIPost: data => dispatch(callLoginAPIPost(data)), 
 	}
 }
 
-export default connect(null, mapDispatchToProps)(withRouter(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

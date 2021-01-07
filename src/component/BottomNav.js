@@ -5,6 +5,11 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import PersonIcon from '@material-ui/icons/Person';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import {useHistory} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {REMOVE_TOKEN, AUTH_ROUTE_INDEX} from '../redux/actionTypes';
+import {useEffect} from 'react';
 import { 
 	Grid,
 } from "@material-ui/core";
@@ -19,34 +24,74 @@ const useStyles = makeStyles({
   	item: {
   		color: "lightblue",
   		textAlign: "center",
+  	},
+  	container: {
+  		justify: "center",
+  		alignItems: "center",
+  		bottom: 30,
+  		left:0, 
+  		right: 0,
+  		position: "absolute",
   	}
 });
 
-const BottomNav = () => {
+
+const BottomNav = (props) => {
   	const classes = useStyles();
-  	const [value, setValue] = React.useState(0);
+
+  	const history = useHistory();
+
+  	useEffect(() => {
+	    return () => {};
+	}, []);
+
+  	const routeNavigate = (path) => {
+  		history.push(path);
+  	}
+
+  	const handleLogout = () => {
+  		props.changeIndex(0);
+
+  		props.logoutHandler();
+  		
+  		routeNavigate('/');
+  	}
 
   	return (
-    	<div>
-    		<Grid container justify="center"  alignItems="center">
-				<Grid item xs={0} sm={3}></Grid>
-				<Grid item xs={12} sm={6}>
+		<div>
+			<Grid container className={classes.container}>
+				<Grid item xs={1} sm={4}></Grid>
+				<Grid item xs={10} sm={4}>
 					<BottomNavigation
-			      		value={value}
+			      		value={props.routeIndex}
 			      		onChange={(event, newValue) => {
-			        		setValue(newValue);
+			        		props.changeIndex(newValue);
 			      		}}
 			      		showLabels
 			      	className={classes.root}>
-					      	<BottomNavigationAction className={classes.item} label="Home" icon={<HomeIcon />} />
-					      	<BottomNavigationAction className={classes.item} label="Posts" icon={<MenuBookIcon />} />
-					      	<BottomNavigationAction className={classes.item} label="Profile" icon={<PersonIcon />} />
+					      	<BottomNavigationAction className={classes.item} label="Home" icon={<HomeIcon />} onClick={() => routeNavigate('/home')}/>
+					      	<BottomNavigationAction className={classes.item} label="Posts" icon={<MenuBookIcon />} onClick={() => routeNavigate('/posts')}/>
+					      	<BottomNavigationAction className={classes.item} label="Profile" icon={<PersonIcon />} onClick={() => routeNavigate('/profile')}/>
+					      	<BottomNavigationAction className={classes.item} label="Logout" icon={<ExitToApp />} onClick={() => handleLogout()}/>
 				    </BottomNavigation>
 				</Grid>
-				<Grid item xs={0} sm={3}></Grid>
+				<Grid item xs={1} sm={4}></Grid>
 			</Grid>
-    	</div>
+		</div>
   	);
 }
 
-export default BottomNav;
+const mapStateToProps = (state) => {
+	return {
+		routeIndex: state.authReducer.authRouteIndex
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		logoutHandler: () => dispatch({type: REMOVE_TOKEN}),
+		changeIndex: (index) => dispatch({type: AUTH_ROUTE_INDEX, index: index})
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BottomNav);
