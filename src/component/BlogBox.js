@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   	root: {
@@ -25,16 +24,16 @@ const useStyles = makeStyles((theme) => ({
   	},
 }));
 
-export default function BlogBox() {
+const BlogBox = (props) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
+      	<CardHeader
+        	avatar={
+          	<Avatar aria-label="recipe" className={classes.avatar}>
+            	R
+          	</Avatar>
         }
         action={
           <IconButton aria-label="settings">
@@ -42,14 +41,14 @@ export default function BlogBox() {
           </IconButton>
         }
         title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
-        </Typography>
-      </CardContent>
+        subheader="September 14, 2016"/>
+      	<CardContent>
+        	<Typography variant="body2" color="textSecondary" component="p">
+          		{props.content}
+        	</Typography>
+      	</CardContent>
     </Card>
   );
 }
+
+export default BlogBox;
