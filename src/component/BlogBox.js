@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   	root: {
@@ -27,21 +28,26 @@ const useStyles = makeStyles((theme) => ({
 const BlogBox = (props) => {
   const classes = useStyles();
 
+  const author = props.author;
+  const subStrAuthor = author.substr(0,2);
+
   return (
     <Card className={classes.root}>
       	<CardHeader
         	avatar={
           	<Avatar aria-label="recipe" className={classes.avatar}>
-            	R
+            	{subStrAuthor}
           	</Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton 
+            aria-label="settings" 
+            onClick={() => props.detailsHandler(props.author, props.id, props.title, props.content)}>
+            <MoreVertIcon/>
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"/>
+        title={props.title}
+        subheader={props.author}/>
       	<CardContent>
         	<Typography variant="body2" color="textSecondary" component="p">
           		{props.content}
@@ -49,6 +55,12 @@ const BlogBox = (props) => {
       	</CardContent>
     </Card>
   );
+}
+
+BlogBox.propTypes = {
+	title: PropTypes.string.isRequired,
+	content: PropTypes.string.isRequired,
+	author: PropTypes.string.isRequired,
 }
 
 export default BlogBox;

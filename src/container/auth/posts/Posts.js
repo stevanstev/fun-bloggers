@@ -8,6 +8,7 @@ import AddBlog from '../blogs/AddBlog';
 import AppBar from '../../../component/AppBar';
 import AlertBox from '../../../component/AlertBox';
 import './posts.css';
+import {getBlogs} from '../../../actions/actions';
 
 class Posts extends Component {
 	constructor(props) {
@@ -16,13 +17,22 @@ class Posts extends Component {
 		this.state = {
 			alertMessage: '',
 			alertOpen: false,
+			blogs: [],
+			currentPageIndex: 0,
+			loadingMessage: 'Loading ...',
 		}
+
+		this.handlePageChange = this.handlePageChange.bind(this);
+	}
+
+	handlePageChange = (event) => {
+		console.log('handle change');
 	}
 
 	closeAlertHandler = () => {
 		this.setState({
 			alertOpen: !this.state.alertOpen,
-		})
+		});
 	}
 
 	handleAlert = (message) => {
@@ -30,6 +40,22 @@ class Posts extends Component {
 			alertOpen: true,
 			alertMessage: message,
 		})
+	}
+
+	componentDidMount() {
+		getBlogs(false)
+		.then(res => {
+			const blogs = res.data.blogs !== "0" ? JSON.parse(res.data.blogs) : [];
+
+			this.setState({
+				blogs: blogs,
+				isLoading: false,
+				loadingMessage: res.data.blogs === "0" ? "-- You haven't write any blog --" : "",
+			});
+		})
+		.catch(err => {
+			console.log(err);
+		});
 	}
 
 	render() {
@@ -43,66 +69,65 @@ class Posts extends Component {
 			},
 			items: {
 				alignItems: "center",
+			},
+			homeContainer: {
+				zIndex: -2,
 			}
 		}
 
+		const {blogs} = this.state;
+
 		return(
-			<div>
-				<AlertBox 
-					alertOpen={this.state.alertOpen} 
-					closeAlertHandler={this.closeAlertHandler} 
-					alertMessage={this.state.alertMessage} />
-				<AppBar />
-				<br/>
-        		<div align="right">
-					<Grid container justify="space-evenly" alignItems="center">
-						<Grid item xs={1} sm={1}></Grid>
-						<Grid item xs={10} sm={10}>
-							<AddBlog handleAlert={(message) => this.handleAlert(message)}/>
+			<React.Fragment>
+				<div className={styles.homeContainer}>			
+					<AlertBox 
+						alertOpen={this.state.alertOpen} 
+						closeAlertHandler={this.closeAlertHandler} 
+						alertMessage={this.state.alertMessage} />
+					<AppBar />
+					<br/>
+					<div align="right">
+						<Grid container justify="space-evenly" alignItems="center">
+							<Grid item xs={1} sm={1}></Grid>
+							<Grid item xs={5} sm={5}></Grid>
+							<Grid item xs={5} sm={5}>
+								<AddBlog handleAlert={(message) => this.handleAlert(message)}/>
+							</Grid>
+							<Grid item xs={1} sm={1}></Grid>
 						</Grid>
-						<Grid item xs={1} sm={1}></Grid>
-					</Grid>
+					</div>
+					<br/>
+	        		<div style={styles.container} align="center">
+						<Grid container justify="space-evenly" alignItems="center">
+							{
+								blogs.length > 0 ? blogs.map(blog => {
+									const {title, content, _id, author} = blog;
+									return (
+										<Grid key={_id} item xs={12} sm={4} style={styles.items}>
+											<BlogBox 
+												title={title} 
+												content={content}
+												id={_id}
+												author={author}
+												onClick={() => null} />
+											<p></p>
+										</Grid>
+									);
+								}) 
+								: 
+								<Grid item xs={12} sm={4} style={styles.items}>
+									<p style={{ color: 'white' }}>{this.state.loadingMessage}</p>
+								</Grid>
+							}
+						</Grid>
+					</div>
+					<br/>				
+					<BottomNav />
 				</div>
-				<br/>
-				<div style={styles.container} align="center">
-					<Grid container justify="space-evenly" alignItems="center">
-						<Grid item sm={1}></Grid>
-						<Grid item xs={12} sm={3} style={styles.items}>
-							<BlogBox title="hello world" content="Hello world is good for you"/>
-							<p></p>
-						</Grid>
-						<Grid item xs={12} sm={4} style={styles.items}>
-							<BlogBox title="hello world" content="Hello world is good for you"/>
-							<p></p>
-						</Grid>
-						<Grid item xs={12} sm={3} style={styles.items}>
-							<BlogBox title="hello world" content="Hello world is good for you"/>
-							<p></p>
-						</Grid>
-						<Grid item sm={1}></Grid>
-					</Grid>
-					<Grid container justify="space-evenly" alignItems="center">
-						<Grid item sm={1}></Grid>
-						<Grid item xs={12} sm={3} style={styles.items}>
-							<BlogBox title="hello world" content="Hello world is good for you"/>
-							<p></p>
-						</Grid>
-						<Grid item xs={12} sm={4} style={styles.items}>
-							<BlogBox title="hello world" content="Hello world is good for you"/>
-							<p></p>
-						</Grid>
-						<Grid item xs={12} sm={3} style={styles.items}>
-							<BlogBox title="hello world" content="Hello world is good for you"/>
-							<p></p>
-						</Grid>
-						<Grid item sm={1}></Grid>
-					</Grid>
-				</div>
-				
-				<BottomNav />
-			</div>
+			</React.Fragment>
 		);
 	}
 }
+
 
 export default Posts;

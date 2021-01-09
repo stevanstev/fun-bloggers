@@ -2,6 +2,7 @@ import {
 	CircularProgress,
 	Backdrop,
 } from "@material-ui/core";
+import PropTypes from 'prop-types';
 
 const loadingCircular = (props) => {
 	return (
@@ -18,6 +19,10 @@ const styles = {
     left: 0,
     right: 0,
     zIndex: -1,
+}
+
+loadingCircular.propTypes = {
+	isLoading: PropTypes.bool.isRequired,
 }
 
 export default loadingCircular;

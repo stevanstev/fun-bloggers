@@ -7,6 +7,5 @@ export const getSession = () => {
 }
 
 export const removeSession = () => {
-	console.log('deleting');
 	localStorage.removeItem("session");
 }

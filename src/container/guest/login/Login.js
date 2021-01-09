@@ -65,69 +65,81 @@ class Login extends Component {
 		});
 	}
 
+	getSnapshotBeforeUpdate(prevProps, prevState) {
+		if (prevProps.canRedirect !== this.props.canRedirect) {
+			return {
+				canRedirect: this.props.canRedirect,
+			}
+		}
+
+		return null;
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (snapshot !== null) {
+			// TODO
+		}
+	}
+
 	render() {
-		if (this.props.canRedirect === true) {
-			this.props.history.replace('/home');
-		} else {
-			return(
-				<React.Fragment>
-				<div className="login-container"> 
-					<Grid container>
-						<Grid item sm={2}></Grid>
-						<Grid item xs={12} sm={8} className="login-form-container">
-							<Grid container>
-								<Grid item xs={12} sm={6}>
-									<img src={loginImage} className="login-image" alt="loginimage"/>
-								</Grid>
-								<Grid item xs={12} sm={6} className="form-container">
-									<img src={appLogo} className="app-logo" alt="applogo"/>
-									<p className="sub-title">Welcome to Fun Bloggers</p>
-									{
-										this.state.showRegister === false ?
-											<div>
-												<form method="post" onSubmit={this.onFormSubmit}>
-													{this.props.isLoading ? <CircularProgress color="secondary" /> : ''}
-													<p>Login</p>
-													<p></p>
-													<TextField 
-														onChange={this.onemailChanged} 
-														type="text"
-														value={this.state.email} 
-														label="Email"
-														placeholder="someone@mail.com" /> 
-													{ this.props.errors.loginEmailError !== "" ? <ErrorField message={this.props.errors.loginEmailError}/> : <p></p>}
-													<TextField
-														type="password"
-														label="Password" 
-														placeholder="******"
-														value={this.state.password}
-														onChange={this.onPasswordChanged} /> 
-													{ this.props.errors.loginPasswordError !== "" ? <ErrorField message={this.props.errors.loginPasswordError}/> : <p></p>}
-													<Button type="submit" variant="contained" color="primary">
-													  	Sign In
-													</Button>
-													<p></p>
-													<h6> -- Or -- </h6>
-												</form>
-												<Button 
-													onClick={() => this.changeForm(true)}
-													type="submit" 
-													className="register-button">
-												  	Sign Up
+		return(
+			<React.Fragment>
+			<div className="login-container"> 
+				<Grid container>
+					<Grid item sm={2}></Grid>
+					<Grid item xs={12} sm={8} className="login-form-container">
+						<Grid container>
+							<Grid item xs={12} sm={6}>
+								<img src={loginImage} className="login-image" alt="loginimage"/>
+							</Grid>
+							<Grid item xs={12} sm={6} className="form-container">
+								<img src={appLogo} className="app-logo" alt="applogo"/>
+								<p className="sub-title">Welcome to Fun Bloggers</p>
+								{
+									this.state.showRegister === false ?
+										<div>
+											<form method="post" onSubmit={this.onFormSubmit}>
+												{this.props.isLoading ? <CircularProgress color="secondary" /> : ''}
+												<p>Login</p>
+												<p></p>
+												<TextField 
+													onChange={this.onemailChanged} 
+													type="text"
+													value={this.state.email} 
+													label="Email"
+													placeholder="someone@mail.com" /> 
+												{ this.props.errors.loginEmailError !== "" ? <ErrorField message={this.props.errors.loginEmailError}/> : <p></p>}
+												<TextField
+													type="password"
+													label="Password" 
+													placeholder="******"
+													value={this.state.password}
+													onChange={this.onPasswordChanged} /> 
+												{ this.props.errors.loginPasswordError !== "" ? <ErrorField message={this.props.errors.loginPasswordError}/> : <p></p>}
+												<Button type="submit" variant="contained" color="primary">
+												  	Sign In
 												</Button>
-											</div>
-										:
-											<Register registerSuccess={this.onRegisterSuccess} backToLogin={() => this.changeForm(false)}/>
-									}
-								</Grid>
+												<p></p>
+												<h6> -- Or -- </h6>
+											</form>
+											<Button 
+												onClick={() => this.changeForm(true)}
+												type="submit" 
+												className="register-button">
+											  	Sign Up
+											</Button>
+										</div>
+									:
+										<Register registerSuccess={this.onRegisterSuccess} backToLogin={() => this.changeForm(false)}/>
+								}
 							</Grid>
 						</Grid>
-						<Grid item sm={2}></Grid>
 					</Grid>
-				</div>
-				</React.Fragment>
-			);
-		}
+					<Grid item sm={2}></Grid>
+				</Grid>
+			</div>
+			</React.Fragment>
+		);
 	}
 }
 
