@@ -9,7 +9,7 @@ import {
 } from '../redux/actionTypes';
 import {getSession} from '../library/session_handler';
 
-const BASE_URL = "http://127.0.0.1:8009/";
+const BASE_URL = "https://fun-bloggers-backend.herokuapp.com/";
 
 export const callRegisterAPIPost = (data) => {
 	const endPoint = BASE_URL + "register";
