@@ -10,7 +10,7 @@ const footer = (props) => {
 	return (
 		<Grid container align="center" style={style}>
 			<Grid item sm={1}></Grid>
-			<Grid item sm={10}>
+			<Grid item xs={12} sm={10}>
 				<Badge color="secondary">
 			    	<a rel="noreferrer" href="https://github.com/stevanstev" target="_blank"><GitHubIcon /></a>
 			    </Badge>

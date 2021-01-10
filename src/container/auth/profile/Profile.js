@@ -48,7 +48,7 @@ class Profile extends Component {
 							<Grid item xs={12} sm={4}></Grid>
 							<Grid item xs={12} sm={4}>
 								<Grid container >
-									<Grid item sm={6}>
+									<Grid item xs={6} sm={6}>
 										<div>
 											<h4>Followed Users</h4>
 											{this.state.followedUser === 0 ? 
@@ -60,7 +60,7 @@ class Profile extends Component {
 											}
 										</div>
 									</Grid>
-									<Grid item sm={6}>
+									<Grid item xs={6} sm={6}>
 										<div>
 											<h4>Blocked Users</h4>
 											{this.state.blockedUser === 0 ? 
