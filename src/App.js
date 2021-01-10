@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Login from './container/guest/login/Login';
 import Home from './container/auth/home/Home';
 import Posts from './container/auth/posts/Posts';
+import Explore from './container/auth/explore/Explore';
 import Relations from './container/auth/relations/Relations';
 import Profile from './container/auth/profile/Profile';
 import {BrowserRouter as Router, Switch } from 'react-router-dom';
@@ -27,6 +28,7 @@ class App extends Component {
                     <PrivateRoute authed={isAuth} exact path="/posts" component={Posts} />
                     <PrivateRoute authed={isAuth} exact path="/profile" component={Profile} />
                     <PrivateRoute authed={isAuth} exact path="/relations" component={Relations} />
+                    <PrivateRoute authed={isAuth} exact path="/explore" component={Explore} />
                 </Switch>
             </Router>
         );

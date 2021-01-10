@@ -151,10 +151,12 @@ export const removeToken = () => {
 export const getBlogs = async (isAll) => {
 	let endPoint;
 	
-	if (isAll === true)	{
+	if (isAll === 1)	{
 		endPoint = BASE_URL + "blog/all";
-	} else {
+	} else if(isAll === 2){
 		endPoint = BASE_URL + "blog";
+	} else {
+		endPoint = BASE_URL + "blog/followed";
 	}
 
 	const token = getSession();
@@ -248,9 +250,6 @@ export const blockUserByEmail = async (userEmail, blockEmail) => {
 	const endPoint = BASE_URL + "relations/block";
 
 	const token = getSession();
-
-	console.log(userEmail);
-	console.log(blockEmail);
 
 	const headers = {
 		'x-auth-token': token,

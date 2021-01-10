@@ -26,6 +26,40 @@ class Relations extends Component {
 			userEmail: '',
 			alertMessage: '',
 			alertOpen: false,
+			shouldReload: false,
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (prevState.shouldReload === true) {
+			loggedInUserDetails()
+			.then(res => {
+				const details = res.data.details[0];
+				const userEmail = details.email;
+
+				getAllRelations(userEmail)
+				.then(res => {
+					const following = res.data.following;
+
+					this.setState({
+						shouldReload: false,
+						users: following,
+						userEmail: userEmail,
+					});
+				})
+				.catch(err => {
+					this.setState({
+						shouldReload: false,
+					});
+					console.log(err);
+				});
+			})
+			.catch(err => {
+				this.setState({
+					shouldReload: false,
+				});
+				console.log(err);
+			});
 		}
 	}
 
@@ -58,11 +92,16 @@ class Relations extends Component {
 		.then(res => {
 			this.setState({
 				alertOpen: true,
+				shouldReload: true,
 				alertMessage: blockEmail+ ' Blocked',
 			});
 		})
 		.catch(err => {
-			console.log(err);
+			this.setState({
+				alertOpen: true,
+				shouldReload: false,
+				alertMessage: 'There was an error',
+			});
 		});
 	}
 

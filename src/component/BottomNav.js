@@ -5,6 +5,7 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import PersonIcon from '@material-ui/icons/Person';
+import SearchIcon from '@material-ui/icons/Search';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import {useHistory} from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -20,7 +21,8 @@ const useStyles = makeStyles({
 			backgroundColor: "white",
 			borderRadius: "10px",
 			boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-			justifyContent: 'space-between',
+			paddingLeft: 30,
+			paddingRight: 30,
 		},
 		item: {
 			color: "lightblue",
@@ -28,10 +30,10 @@ const useStyles = makeStyles({
 		},
 		container: {
 			width: '100%',
-				position: 'fixed',
-				bottom: 30,
-				left: 0,
-				right: 0,
+			position: 'fixed',
+			bottom: 30,
+			left: 0,
+			right: 0,
 		}
 });
 
@@ -58,8 +60,8 @@ const BottomNav = (props) => {
 		return (
 		<div>
 			<Grid container className={classes.container}>
-				<Grid item xs={1} sm={4}></Grid>
-				<Grid item xs={10} sm={4}>
+				<Grid item sm={4}></Grid>
+				<Grid item xs={12} sm={4}>
 					<BottomNavigation
 								value={props.routeIndex}
 								onChange={(event, newValue) => {
@@ -68,12 +70,13 @@ const BottomNav = (props) => {
 								showLabels
 							className={classes.root}>
 									<BottomNavigationAction className={classes.item} label="Home" icon={<HomeIcon />} onClick={() => routeNavigate('/home')}/>
-									<BottomNavigationAction className={classes.item} label="My Posts" icon={<MenuBookIcon />} onClick={() => routeNavigate('/posts')}/>
+									<BottomNavigationAction className={classes.item} label="Explore" icon={<SearchIcon />} onClick={() => routeNavigate('/explore')}/>
+									<BottomNavigationAction className={classes.item} label="Posts" icon={<MenuBookIcon />} onClick={() => routeNavigate('/posts')}/>
 									<BottomNavigationAction className={classes.item} label="Profile" icon={<PersonIcon />} onClick={() => routeNavigate('/profile')}/>
 									<BottomNavigationAction className={classes.item} label="Logout" icon={<ExitToApp />} onClick={() => handleLogout()}/>
 						</BottomNavigation>
 				</Grid>
-				<Grid item xs={1} sm={4}></Grid>
+				<Grid item sm={4}></Grid>
 			</Grid>
 		</div>
 		);

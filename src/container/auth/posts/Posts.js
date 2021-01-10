@@ -20,6 +20,7 @@ class Posts extends Component {
 			blogs: [],
 			currentPageIndex: 0,
 			loadingMessage: 'Loading ...',
+			requiredToLoad: false,
 		}
 
 		this.handlePageChange = this.handlePageChange.bind(this);
@@ -39,11 +40,47 @@ class Posts extends Component {
 		this.setState({
 			alertOpen: true,
 			alertMessage: message,
-		})
+			requiredToLoad: true,
+		});
+	}
+
+	componentWillUnmount() {
+		this.setState({
+			alertMessage: '',
+			alertOpen: false,
+			blogs: [],
+			currentPageIndex: 0,
+			loadingMessage: 'Loading ...',
+			requiredToLoad: false,
+		});
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if(prevState.requiredToLoad === true) {
+			getBlogs(2)
+			.then(res => {
+				const blogs = res.data.blogs !== "0" ? JSON.parse(res.data.blogs) : [];
+
+				this.setState({
+					blogs: blogs,
+					isLoading: false,
+					requiredToLoad: false,
+					loadingMessage: res.data.blogs === "0" ? "-- You haven't write any blog --" : "",
+				});
+			})
+			.catch(err => {
+				this.setState({
+					blogs: [],
+					requiredToLoad: false,
+					isLoading: false,
+					loadingMessage: "There was an error",
+				});
+			});
+		}
 	}
 
 	componentDidMount() {
-		getBlogs(false)
+		getBlogs(2)
 		.then(res => {
 			const blogs = res.data.blogs !== "0" ? JSON.parse(res.data.blogs) : [];
 
@@ -54,7 +91,11 @@ class Posts extends Component {
 			});
 		})
 		.catch(err => {
-			console.log(err);
+			this.setState({
+				blogs: [],
+				isLoading: false,
+				loadingMessage: "There was an error",
+			});
 		});
 	}
 

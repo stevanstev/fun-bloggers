@@ -11,7 +11,7 @@ import {getBlogs, followUser, alreadyFollowing} from '../../../actions/actions';
 import OpenDialog from '../../../component/OpenDialog';
 import AlertBox from '../../../component/AlertBox';
 
-class Home extends Component {
+class Explore extends Component {
 	constructor(props) {
 		super(props);
 
@@ -26,18 +26,41 @@ class Home extends Component {
 			openDialog: false,
 			alertOpen: false,
 			alertMessage: '',
+			shouldReload: false,
 		};
 	}
 
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (prevState.shouldReload === true) {
+			getBlogs(1)
+			.then(res => {
+				const blogs = res.data.blogs !== "0" ? JSON.parse(res.data.blogs) : [];
+				this.setState({
+					shouldReload: false,
+					blogs: blogs,
+					isLoading: false,
+					loadingMessage: res.data.blogs === "0" ? "-- Your explore is empty --" : "",
+				});
+			})
+			.catch(err => {
+				this.setState({
+					blogs: [],
+					shouldReload: false,
+					isLoading: false,
+					loadingMessage: "There was an error",
+				});
+			});
+		}
+	}
+
 	componentDidMount() {
-		this.props.resetState();
-		getBlogs(3)
+		getBlogs(1)
 		.then(res => {
 			const blogs = res.data.blogs !== "0" ? JSON.parse(res.data.blogs) : [];
 			this.setState({
 				blogs: blogs,
 				isLoading: false,
-				loadingMessage: res.data.blogs === "0" ? "-- Follow Someone --" : "",
+				loadingMessage: res.data.blogs === "0" ? "-- Your explore is empty --" : "",
 			});
 		})
 		.catch(err => {
@@ -91,6 +114,7 @@ class Home extends Component {
 						alertOpen: true,
 						openDialog: false,
 						alertMessage: "User Followed",
+						shouldReload: true,
 					});
 				})
 				.catch(err => {
@@ -187,4 +211,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(null, mapDispatchToProps)(Explore);
