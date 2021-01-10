@@ -9,6 +9,7 @@ import AppBar from '../../../component/AppBar';
 import AlertBox from '../../../component/AlertBox';
 import './posts.css';
 import {getBlogs} from '../../../actions/actions';
+import Footer from '../../../component/Footer';
 
 class Posts extends Component {
 	constructor(props) {
@@ -164,6 +165,7 @@ class Posts extends Component {
 					</div>
 					<br/>				
 					<BottomNav />
+					<Footer />
 				</div>
 			</React.Fragment>
 		);

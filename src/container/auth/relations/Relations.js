@@ -16,6 +16,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import AppBar from '../../../component/AppBar';
 import {blockUserByEmail} from '../../../actions/actions';
 import AlertBox from '../../../component/AlertBox';
+import Footer from '../../../component/Footer';
 
 class Relations extends Component {
 	constructor(props) {
@@ -161,6 +162,7 @@ class Relations extends Component {
 				   		null
 				   	}
 				</List>
+				<Footer />
 				<BottomNav />
 			</div>
 		);

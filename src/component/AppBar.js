@@ -21,7 +21,7 @@ const styles = {
 		alignItems: "center",
 		backgroundImage: "linear-gradient(to right,#70e1f5, #ffd194)",
 		borderRadius: 4,
-		padding: 4,
+		padding: 2,
 	},
 }
 

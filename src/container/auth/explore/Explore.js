@@ -10,6 +10,7 @@ import BlogBox from '../../../component/BlogBox';
 import {getBlogs, followUser, alreadyFollowing} from '../../../actions/actions';
 import OpenDialog from '../../../component/OpenDialog';
 import AlertBox from '../../../component/AlertBox';
+import Footer from '../../../component/Footer';
 
 class Explore extends Component {
 	constructor(props) {
@@ -199,6 +200,7 @@ class Explore extends Component {
 						</Grid>
 					</div>
 					<BottomNav />
+					<Footer />
 				</div>
 			</React.Fragment>
 		);

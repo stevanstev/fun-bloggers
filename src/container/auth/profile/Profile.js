@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import {getRelationsOfUser} from '../../../actions/actions';
 import {withRouter} from 'react-router-dom';
+import Footer from '../../../component/Footer';
 
 class Profile extends Component {
 	constructor(props) {
@@ -65,7 +66,7 @@ class Profile extends Component {
 											{this.state.blockedUser === 0 ? 
 												<span>No blocked User</span> 
 												:
-												<Button variant="outlined" onClick={() => this.routingHandler('/relations')} color="primary">
+												<Button variant="outlined" onClick={() => this.routingHandler('/relations')} color="secondary">
 											  		{this.state.blockedUser}
 												</Button>
 											}
@@ -77,6 +78,7 @@ class Profile extends Component {
 						</Grid>
 					</div>
 				<BottomNav />
+				<Footer />
 			</div>
 		);
 	}
